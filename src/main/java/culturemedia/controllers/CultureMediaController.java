@@ -1,10 +1,10 @@
-package culturoteca.controllers;
+package culturemedia.controllers;
 
 import java.util.*;
 
-import culturoteca.exception.VideoNotFoundException;
-import culturoteca.model.Video;
-import culturoteca.service.impl.CultureMediaServiceImpl;
+import culturemedia.exception.VideoNotFoundException;
+import culturemedia.model.Video;
+import culturemedia.service.Impl.CultureMediaServiceImpl;
 
 public class CultureMediaController {
 
