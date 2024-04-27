@@ -1,6 +1,6 @@
 package culturemedia.controllers;
 
-import java.util.*;
+import java.util.List;
 
 import culturemedia.exception.VideoNotFoundException;
 import culturemedia.model.Video;
