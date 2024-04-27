@@ -3,10 +3,10 @@ package culturemedia.service.Impl;
 import culturemedia.exception.VideoNotFoundException;
 import culturemedia.model.Video;
 import culturemedia.model.View;
-import culturemedia.repository.Impl.ViewsRepositoryImpl;
 import culturemedia.repository.VideoRepository;
 import culturemedia.repository.ViewsRepository;
 import culturemedia.service.CultureMediaService;
+
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class CultureMediaServiceImpl implements CultureMediaService {
 
     public CultureMediaServiceImpl(VideoRepository videoRepository, ViewsRepository viewsRepository) {
         this.videoRepository = videoRepository;
-        this.viewsRepository = new ViewsRepositoryImpl();
+        this.viewsRepository = viewsRepository;
 
     }
 
