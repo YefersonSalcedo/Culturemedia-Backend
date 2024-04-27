@@ -8,7 +8,7 @@ import culturemedia.service.Impl.CultureMediaServiceImpl;
 
 public class CultureMediaController {
 
-	private final CultureMediaServiceImpl cultureMediaService;
+	private final CultureMediaService cultureMediaService;
 
 
 	public CultureMediaController(CultureMediaServiceImpl cultureMediaService) {
