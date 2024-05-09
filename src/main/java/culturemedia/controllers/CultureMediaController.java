@@ -37,6 +37,30 @@ public class CultureMediaController {
 		}
 	}
 
+	@GetMapping("/videos/{title}")
+	public ResponseEntity<List<Video>> findVideosByTitle(@PathVariable String title) {
+		try {
+			logger.info("Finding videos by title: {}", title);
+			return ResponseEntity.ok().body(cultureMediaService.find(title));
+		} catch (VideoNotFoundException e) {
+			logger.error("Error finding videos by title {}: {}", title, e.getMessage());
+			return ResponseEntity.ok().header("Error-Message", e.getMessage()).build();
+		}
+	}
+
+	@GetMapping("/videos/duration")
+	public ResponseEntity<List<Video>> findVideosByDuration(@RequestParam("from") Double fromDuration,
+															@RequestParam("to") Double toDuration) {
+		try {
+			logger.info("Finding videos by duration range: {} - {}", fromDuration, toDuration);
+			return ResponseEntity.ok().body(cultureMediaService.find(fromDuration, toDuration));
+		} catch (VideoNotFoundException e) {
+			logger.error("Error finding videos by duration range {} - {}: {}", fromDuration, toDuration, e.getMessage());
+			return ResponseEntity.ok().header("Error-Message", e.getMessage()).build();
+		}
+	}
+
+
 	@PostMapping("/videos")
 	public Video addVideo(@RequestBody Video video) {
 		logger.info("Adding a new video: {}", video.title());
