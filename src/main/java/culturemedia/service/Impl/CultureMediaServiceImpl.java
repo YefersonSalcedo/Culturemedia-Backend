@@ -35,6 +35,14 @@ public class CultureMediaServiceImpl implements CultureMediaService {
     }
 
     @Override
+    public Video save(List<Video> videos) {
+        for (Video video : videos) {
+            videoRepository.save(video);
+        }
+        return null;
+    }
+
+    @Override
     public View save(View view) {
         return viewsRepository.save(view);
     }

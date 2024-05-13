@@ -8,6 +8,7 @@ import culturemedia.repository.Impl.VideoRepositoryImpl;
 import culturemedia.repository.Impl.ViewsRepositoryImpl;
 import culturemedia.service.CultureMediaService;
 import culturemedia.service.Impl.CultureMediaServiceImpl;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,6 @@ public class CultureMediaController {
 
 	private final CultureMediaService cultureMediaService;
 	private static final Logger logger = LoggerFactory.getLogger(CultureMediaController.class);
-
 
 	public CultureMediaController() {
 		this.cultureMediaService = new CultureMediaServiceImpl(new VideoRepositoryImpl(), new ViewsRepositoryImpl());
@@ -60,11 +60,15 @@ public class CultureMediaController {
 		}
 	}
 
-
 	@PostMapping("/videos")
-	public Video addVideo(@RequestBody Video video) {
+	public Video addVideo(@RequestBody @Valid Video video) {
 		logger.info("Adding a new video: {}", video.title());
 		return cultureMediaService.save(video);
 	}
 
+	@PostMapping("/videos/bulk")
+	public Video addVideo(@RequestBody @Valid List<Video> videos) {
+		logger.info("Adding videos to bulk: {}", videos.size());
+		return cultureMediaService.save(videos);
+	}
 }
