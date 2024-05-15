@@ -11,6 +11,6 @@ public interface CultureMediaService {
     List<Video> find(String title) throws VideoNotFoundException;
     List<Video> find(Double fromDuration, Double toDuration) throws VideoNotFoundException;
     Video save(Video video);
-    Video save(List<Video> videos);
+    List<Video> save(List<Video> videos);
     View save(View view);
 }

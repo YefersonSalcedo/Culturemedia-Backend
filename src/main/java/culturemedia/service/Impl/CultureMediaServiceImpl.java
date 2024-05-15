@@ -8,11 +8,12 @@ import culturemedia.repository.ViewsRepository;
 import culturemedia.service.CultureMediaService;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CultureMediaServiceImpl implements CultureMediaService {
-    private VideoRepository videoRepository;
-    private ViewsRepository viewsRepository;
+    private final VideoRepository videoRepository;
+    private final ViewsRepository viewsRepository;
 
     public CultureMediaServiceImpl(VideoRepository videoRepository, ViewsRepository viewsRepository) {
         this.videoRepository = videoRepository;
@@ -35,11 +36,12 @@ public class CultureMediaServiceImpl implements CultureMediaService {
     }
 
     @Override
-    public Video save(List<Video> videos) {
+    public List<Video> save(List<Video> videos) {
+        List<Video> savedVideos = new ArrayList<>();
         for (Video video : videos) {
-            videoRepository.save(video);
+            savedVideos.add(videoRepository.save(video));
         }
-        return null;
+        return savedVideos;
     }
 
     @Override
