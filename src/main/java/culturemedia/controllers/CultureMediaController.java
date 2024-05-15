@@ -67,7 +67,7 @@ public class CultureMediaController {
 	}
 
 	@PostMapping("/videos/bulk")
-	public Video addVideo(@RequestBody @Valid List<Video> videos) {
+	public List<Video> addVideo(@RequestBody @Valid List<Video> videos) {
 		logger.info("Adding videos to bulk: {}", videos.size());
 		return cultureMediaService.save(videos);
 	}
