@@ -37,11 +37,12 @@ public class CultureMediaController {
 		}
 	}
 
-	@GetMapping("/videos/{title}")
-	public ResponseEntity<List<Video>> findVideosByTitle(@PathVariable String title) {
+	@GetMapping("/videos/")
+	public ResponseEntity<List<Video>> findVideosByTitle(@RequestParam("title") String title) {
 		try {
-			logger.info("Finding videos by title: {}", title);
-			return ResponseEntity.ok().body(cultureMediaService.find(title));
+			List<Video> video = cultureMediaService.find(title);
+			logger.info("Finding videos by title: '{}'. Found videos: {}", title, video);
+			return ResponseEntity.ok().body(video);
 		} catch (VideoNotFoundException e) {
 			logger.error("Error finding videos by title {}: {}", title, e.getMessage());
 			return ResponseEntity.ok().header("Error-Message", e.getMessage()).build();
@@ -62,13 +63,13 @@ public class CultureMediaController {
 
 	@PostMapping("/videos")
 	public Video addVideo(@RequestBody @Valid Video video) {
-		logger.info("Adding a new video: {}", video.title());
+		logger.info("Adding a new video: {}", video);
 		return cultureMediaService.save(video);
 	}
 
 	@PostMapping("/videos/bulk")
 	public List<Video> addVideo(@RequestBody @Valid List<Video> videos) {
-		logger.info("Adding videos to bulk: {}", videos.size());
+		logger.info("Adding videos to bulk: {}", videos);
 		return cultureMediaService.save(videos);
 	}
 }
