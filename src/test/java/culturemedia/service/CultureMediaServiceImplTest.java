@@ -8,126 +8,96 @@ import culturemedia.repository.ViewsRepository;
 import culturemedia.service.Impl.CultureMediaServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
+import static org.mockito.Mockito.doReturn;
 
 class CultureMediaServiceImplTest {
 
-    private CultureMediaService cultureMediaService;
-    VideoRepository videoRepository = Mockito.mock();
-    ViewsRepository viewsRepository = Mockito.mock();
+    @InjectMocks
+    private CultureMediaServiceImpl cultureMediaService;
 
-    private Video video1 = new Video("01", "Título 1", "----", 4.5);
-    private Video video2 = new Video("02", "Título 2", "----", 5.5);
-    private Video video3 = new Video("03", "Título 3", "----", 4.4);
-    private Video video4 = new Video("04", "Título 4", "----", 3.5);
-    private Video video5 = new Video("05", "Clic 5", "----", 5.7);
-    private Video video6 = new Video("06", "Clic 6", "----", 5.1);
+    @Mock
+    private VideoRepository videoRepository;
 
+    @Mock
+    private ViewsRepository viewsRepository;
+
+    private final Video video1 = new Video("Título 1", "Descripción 1", 4.5);
+    private final Video video2 = new Video("Título 2", "Descripción 2", 5.5);
+    private final Video video3 = new Video("Título 3", "Descripción 3", 4.4);
+    private final Video video4 = new Video("Título 4", "Descripción 4", 3.5);
+    private final Video video5 = new Video("Clic 5", "Descripción 5", 5.7);
+    private final Video video6 = new Video("Clic 6", "Descripción 6", 5.1);
 
     @BeforeEach
     void init() {
-        cultureMediaService = new CultureMediaServiceImpl(videoRepository, viewsRepository);
+        MockitoAnnotations.openMocks(this);
     }
-
-    private void mockVideoRepositoryFindAll(List <Video> videos){
-        doReturn(videos).when(videoRepository).findAll();
-    }
-
-    private void mockVideoRepositoryFind(String title, List<Video> videos){
-        doReturn(videos).when(videoRepository).find(eq(title));
-    }
-
-    private void mockVideoRepositoryFind(Double fromDuration, Double toDuration, List<Video> videos){
-        doReturn(videos).when(videoRepository).find(eq(fromDuration), eq(toDuration));
-    }
-
-
 
     @Test
     void when_FindAll_all_videos_should_be_returned_successfully() throws VideoNotFoundException {
-        mockVideoRepositoryFindAll(List.of(
-                video1,
-                video2,
-                video3,
-                video4,
-                video5,
-                video6)
-        );
+        doReturn(List.of(video1, video2, video3, video4, video5, video6)).when(videoRepository).findAll();
         List<Video> videos = cultureMediaService.findAll();
         assertEquals(6, videos.size());
     }
 
-
     @Test
     void when_FindAll_does_not_find_any_video_an_VideoNotFoundException_should_be_thrown_successfully() {
-        // Asegura que se lance VideoNotFoundException cuando se llame a findAll() en un repositorio vacío
-        mockVideoRepositoryFindAll(Collections.emptyList());
+        doReturn(Collections.emptyList()).when(videoRepository).findAll();
         assertThrows(VideoNotFoundException.class, () -> cultureMediaService.findAll());
     }
 
     @Test
     void when_Find_by_title_should_return_matching_video() throws VideoNotFoundException {
-
-        mockVideoRepositoryFind("Titulo 2", List.of(video2));
-        List<Video> videos= cultureMediaService.find("Titulo 2");
+        doReturn(List.of(video2)).when(videoRepository).findByTitle(eq("Título 2"));
+        List<Video> videos = cultureMediaService.findByTitle("Título 2");
         assertEquals(1, videos.size());
         assertEquals(video2, videos.get(0));
     }
 
     @Test
-    void when_Find_by_title_with_nonexistent_title_should_throw_VideoNotFoundException() {
-        mockVideoRepositoryFind(null,Collections.emptyList());
-        assertThrows(VideoNotFoundException.class, () -> cultureMediaService.find("Título -1"));
+    void when_Find_by_title_with_nonexistent_title_should_throw_VideoNotFoundException() throws VideoNotFoundException {
+        doReturn(Collections.emptyList()).when(videoRepository).findByTitle(eq("Título -1"));
+        assertThrows(VideoNotFoundException.class, () -> cultureMediaService.findByTitle("Título -1"));
     }
 
     @Test
     void when_Find_by_duration_range_should_return_videos_within_range() throws VideoNotFoundException {
-
-        mockVideoRepositoryFind(3.5,5.5,List.of(
-                video1,
-                video2,
-                video3,
-                video4,
-                video5));
-        List<Video> videos = cultureMediaService.find(3.5, 5.5);
+        doReturn(List.of(video1, video2, video3, video4, video5)).when(videoRepository).findByDurationBetween(eq(3.5), eq(5.5));
+        List<Video> videos = cultureMediaService.findByDuration(3.5, 5.5);
         assertEquals(5, videos.size());
     }
 
     @Test
-    void when_Find_by_duration_range_with_invalid_range_should_throw_VideoNotFoundException() {
-        mockVideoRepositoryFind(null,null,Collections.emptyList());
-        assertThrows(VideoNotFoundException.class, () -> cultureMediaService.find(6.0, 2.0));
+    void when_Find_by_duration_range_with_invalid_range_should_throw_VideoNotFoundException() throws VideoNotFoundException {
+        doReturn(Collections.emptyList()).when(videoRepository).findByDurationBetween(eq(6.0), eq(2.0));
+        assertThrows(VideoNotFoundException.class, () -> cultureMediaService.findByDuration(6.0, 2.0));
     }
 
     @Test
-    void when_Save_video_should_be_saved_successfully() { // Asegura que un Video se guarde correctamente
-        Video videoToSave = new Video("07", "Nuevo Video", "Descripción", 6.0);
-        when(videoRepository.save(any(Video.class))).thenReturn(videoToSave);
+    void when_Save_video_should_be_saved_successfully() {
+        Video videoToSave = new Video("Nuevo Video", "Descripción", 6.0);
+        doReturn(videoToSave).when(videoRepository).save(videoToSave);
         Video savedVideo = cultureMediaService.save(videoToSave);
-
-        verify(videoRepository).save(videoToSave);
         assertEquals(videoToSave, savedVideo);
     }
 
     @Test
-    void when_Save_View_should_be_updated_successfully() { // Asegura que una View se guarde correctamente
+    void when_Save_View_should_be_updated_successfully() {
         View viewToSave = new View("Juanito Perez", LocalDateTime.now(), 25, video1);
-        when(viewsRepository.save(any(View.class))).thenReturn(viewToSave);
+        doReturn(viewToSave).when(viewsRepository).save(viewToSave);
         View savedView = cultureMediaService.save(viewToSave);
-
-        verify(viewsRepository).save(viewToSave);
         assertEquals(viewToSave, savedView);
     }
-
 }
+
 

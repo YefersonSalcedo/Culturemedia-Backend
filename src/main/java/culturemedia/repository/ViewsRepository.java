@@ -1,7 +1,9 @@
 package culturemedia.repository;
 
 import culturemedia.model.View;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ViewsRepository {
-    View save(View view);
+@Repository
+public interface ViewsRepository extends JpaRepository<View, Long> {
 }
