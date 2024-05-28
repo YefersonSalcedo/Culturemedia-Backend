@@ -6,20 +6,21 @@ import culturemedia.model.View;
 import culturemedia.repository.VideoRepository;
 import culturemedia.repository.ViewsRepository;
 import culturemedia.service.CultureMediaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class CultureMediaServiceImpl implements CultureMediaService {
-    private final VideoRepository videoRepository;
-    private final ViewsRepository viewsRepository;
 
-    public CultureMediaServiceImpl(VideoRepository videoRepository, ViewsRepository viewsRepository) {
-        this.videoRepository = videoRepository;
-        this.viewsRepository = viewsRepository;
+    @Autowired
+    VideoRepository videoRepository;
+    @Autowired
+    ViewsRepository viewsRepository;
 
-    }
 
     @Override
     public List<Video> findAll() throws VideoNotFoundException {
@@ -28,6 +29,27 @@ public class CultureMediaServiceImpl implements CultureMediaService {
             throw new VideoNotFoundException();
         }
         return videos;
+    }
+
+    @Override
+    public List<Video> findByTitle(String title) throws VideoNotFoundException {
+        List<Video> videos = videoRepository.findByTitle(title);
+        if (videos.isEmpty()) {
+            throw new VideoNotFoundException();
+        }
+        else{
+            return videos;
+        }
+    }
+
+    @Override
+    public List<Video> findByDuration(double fromDuration, double toDuration) throws VideoNotFoundException {
+        List<Video> videos = videoRepository.findByDurationBetween(fromDuration, toDuration);
+        if (videos.isEmpty()) {
+            throw new VideoNotFoundException();
+        } else {
+            return videos;
+        }
     }
 
     @Override
@@ -49,25 +71,4 @@ public class CultureMediaServiceImpl implements CultureMediaService {
         return viewsRepository.save(view);
     }
 
-    @Override
-    public List<Video> find(String title) throws VideoNotFoundException {
-        List<Video> videos = videoRepository.find(title);
-        if (videos.isEmpty()) {
-            throw new VideoNotFoundException();
-        }
-        else{
-            return videos;
-        }
-    }
-
-    @Override
-    public List<Video> find(Double fromDuration, Double toDuration) throws VideoNotFoundException {
-        List<Video> videos = videoRepository.find(fromDuration,toDuration);
-        if (videos.isEmpty()) {
-            throw new VideoNotFoundException();
-        }
-        else {
-            return videos;
-        }
-    }
 }
