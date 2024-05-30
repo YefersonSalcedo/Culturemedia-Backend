@@ -1,0 +1,14 @@
+insert into video (description, duration, title) values ('Este es mi primer video.', 4.0, 'Primer video');
+insert into video (description, duration, title) values ('Este video tiene una duración mayor que el anterior.', 8.6, 'Segundo video');
+insert into video (description, duration, title) values ('Este video tiene una descripción corta.', 2.2, 'Tercer video');
+insert into video (description, duration, title) values ('Este video no tiene importancia.', 5.1, 'Cuarto video');
+insert into video (description, duration, title) values ('Este es el quinto video en la lista.', 3.5, 'Quinto video');
+insert into video (description, duration, title) values ('Este video es el sexto de la serie.', 6.8, 'Sexto video');
+insert into video (description, duration, title) values ('Un video interesante sobre un tema específico.', 9.2, 'Séptimo video');
+insert into video (description, duration, title) values ('Este video es corto pero impactante.', 1.9, 'Octavo video');
+insert into video (description, duration, title) values ('Una mirada rápida a un tema importante.', 4.7, 'Noveno video');
+insert into video (description, duration, title) values ('El décimo video de la serie.', 7.3, 'Décimo video');
+insert into video (description, duration, title) values ('Otro video interesante para ver.', 5.5, 'Undécimo video');
+insert into video (description, duration, title) values ('Un video informativo sobre un tema relevante.', 3.1, 'Duodécimo video');
+insert into video (description, duration, title) values ('Un video que no te puedes perder.', 8.0, 'Decimotercer video');
+insert into video (description, duration, title) values ('Este video es el número catorce en la lista.', 6.2, 'Catorceavo video');
